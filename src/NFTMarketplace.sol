@@ -18,14 +18,16 @@ contract NFTMarketplace is Ownable, ReentrancyGuard {
 
     event NTFTListed(address indexed seller, address indexed nftAddress, uint256 indexed tokenId, uint256 price);
     event NTFTCanceled(address indexed seller, address indexed nftAddress, uint256 indexed tokenId);
-    event NFTSold(address indexed buyer, address indexed seller , address indexed nftAddress, uint256 tokenId, uint256 price);
+    event NFTSold(
+        address indexed buyer, address indexed seller, address indexed nftAddress, uint256 tokenId, uint256 price
+    );
     event MarketplaceFeeUpdated(uint256 newFeeBps);
 
     constructor() Ownable(msg.sender) {}
 
     // onlyOwner
     function setMarketplaceFee(uint256 feeBps_) external onlyOwner {
-        require(feeBps_ <= 1000, "Fee too high"); 
+        require(feeBps_ <= 1000, "Fee too high");
 
         marketplaceFeeBps = feeBps_;
 
@@ -63,10 +65,10 @@ contract NFTMarketplace is Ownable, ReentrancyGuard {
 
         uint256 feeAmount_ = (msg.value * marketplaceFeeBps) / 10000;
         uint256 sellerAmount_ = msg.value - feeAmount_;
-        
+
         IERC721(nftAddress_).safeTransferFrom(listing_.seller, msg.sender, listing_.tokenId);
 
-        (bool success_, ) = listing_.seller.call{value: sellerAmount_}("");
+        (bool success_,) = listing_.seller.call{value: sellerAmount_}("");
         require(success_, "Failed to transfer funds");
 
         // fee para owner
