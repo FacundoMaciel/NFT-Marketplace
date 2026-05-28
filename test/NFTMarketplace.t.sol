@@ -6,7 +6,6 @@ import "../lib/openzeppelin-contracts/contracts/token/ERC721/ERC721.sol";
 import "../src/NFTMarketplace.sol";
 
 contract MockNFT is ERC721 {
-
     constructor() ERC721("MockNFT", "MNFT") {}
 
     function mint(address to_, uint256 tokenId_) external {
@@ -15,7 +14,6 @@ contract MockNFT is ERC721 {
 }
 
 contract NFTMarketplaceTest is Test {
-    
     NFTMarketplace marketplace;
     MockNFT mockNFT;
     address deployer = vm.addr(1);
@@ -27,7 +25,7 @@ contract NFTMarketplaceTest is Test {
         marketplace = new NFTMarketplace();
         mockNFT = new MockNFT();
         vm.stopPrank();
-        
+
         vm.startPrank(user);
         mockNFT.mint(user, tokenId);
         vm.stopPrank();
@@ -36,7 +34,6 @@ contract NFTMarketplaceTest is Test {
     function testMintNFT() public view {
         address ownerOf = mockNFT.ownerOf(tokenId);
         assert(ownerOf == user);
-
     }
 
     function testShouldRevertIfPriceIsZero() public {
@@ -62,7 +59,7 @@ contract NFTMarketplaceTest is Test {
     }
 
     function testListNFTcorrectly() public {
-         vm.startPrank(user);
+        vm.startPrank(user);
 
         (address sellerBefore,,,) = marketplace.listing(address(mockNFT), tokenId);
         marketplace.listNFT(address(mockNFT), tokenId, 1e18);
@@ -74,7 +71,7 @@ contract NFTMarketplaceTest is Test {
     }
 
     function testListShouldRevertIfNotOwner() public {
-         vm.startPrank(user);
+        vm.startPrank(user);
 
         (address sellerBefore,,,) = marketplace.listing(address(mockNFT), tokenId);
         marketplace.listNFT(address(mockNFT), tokenId, 1e18);
@@ -171,5 +168,4 @@ contract NFTMarketplaceTest is Test {
 
         vm.stopPrank();
     }
-
 }
