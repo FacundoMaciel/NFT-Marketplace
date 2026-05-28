@@ -13,7 +13,7 @@ contract NFTMarketplace is Ownable, ReentrancyGuard {
         uint256 price;
     }
 
-    mapping(address => mapping(uint256 => Listing)) listing;
+    mapping(address => mapping(uint256 => Listing)) public listing;
     uint256 public marketplaceFeeBps = 250;
 
     event NTFTListed(address indexed seller, address indexed nftAddress, uint256 indexed tokenId, uint256 price);
